@@ -326,8 +326,8 @@ class ArtifactRiskPredictor:
 {warnings}
 
 ╠═══════════════════════════════════════════════════════╣
-   ℹ️ This is informational - use outputs with other nodes
-   💡 Connect risk_score to switches for conditional logic
+ ℹ️ This is informational - use outputs with other nodes
+ 💡 Connect risk_score to switches for conditional logic
 ╚═══════════════════════════════════════════════════════╝
 """
         return report
@@ -346,5 +346,6 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ArtifactRiskPredictor": "Artifact Risk Predictor (Arctenox's Essentials)",
 }
+
 
 __all__ = ["ArtifactRiskPredictor"]
