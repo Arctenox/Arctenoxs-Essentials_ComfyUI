@@ -40,7 +40,7 @@ Arctenox's Essentials provides a suite of powerful workflow nodes that enhance C
 
 2. Clone this repository:
    ```bash
-   git https://github.com/Arctenox/Arctenoxs-Essentials_ComfyUI
+   git clone https://github.com/Arctenox/Arctenoxs-Essentials_ComfyUI
    ```
 
 3. Restart ComfyUI
