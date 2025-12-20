@@ -24,7 +24,7 @@ class KSamplerWithLatent:
                 "seed": ("INT", {"default": 0, "min": -0x7fffffffffffffff, "max": 0xffffffffffffffff}),
                 "sonar": ("INT", {"default": 0, "min": -18446744073709552000, "max": 18446744073709552000}),
                 "steps": ("INT", {"default": 25, "min": 1, "max": 10000}),
-                "cfg": ("FLOAT", {"default": 4.0, "min": 0.0, "max": 100.0, "step": 0.1}),
+                "cfg": ("FLOAT", {"default": 4.0, "min": 0.0, "max": 100.0, "step": 0.01}),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
