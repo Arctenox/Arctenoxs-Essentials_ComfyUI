@@ -1,0 +1,64 @@
+[project]
+name = "arctenoxs-essentials-comfyui"
+version = "1.0.0"
+description = "A collection of efficient workflow nodes for ComfyUI with advanced sampling, seed management, temporal prompt processing, and workflow optimization tools"
+license = { text = "GPL-3.0" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "torch>=1.12.0",
+    "numpy>=1.21.0",
+    "psutil>=5.8.0"
+]
+authors = [
+    { name = "Arctenox" }
+]
+keywords = [
+    "comfyui",
+    "custom-nodes",
+    "sampling",
+    "seed-management",
+    "workflow-optimization",
+    "ksampler",
+    "prompt-processing",
+    "ai",
+    "stable-diffusion",
+    "image-generation"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Graphics",
+    "Operating System :: OS Independent",
+    "Environment :: GPU :: NVIDIA CUDA",
+    "Environment :: GPU :: AMD ROCm",
+    "Environment :: GPU :: Apple Metal"
+]
+
+[project.urls]
+Repository = "https://github.com/Arctenox/Arctenoxs-Essentials_ComfyUI"
+Issues = "https://github.com/Arctenox/Arctenoxs-Essentials_ComfyUI/issues"
+Discord = "https://discord.gg/UVXPdkgedh"
+
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["."]
+
+[tool.setuptools.package-data]
+"*" = ["*.py"]
+
+[tool.comfy]
+PublisherId = "arctenox"
+DisplayName = "Arctenox's Essentials"
+Icon = "https://raw.githubusercontent.com/Arctenox/Arctenoxs-Essentials_ComfyUI/main/icon.png"
