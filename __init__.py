@@ -7,7 +7,7 @@ and optimize your generation process with combined functionality and
 improved performance.
 
 Author: Arctenox
-Version: 1.0.0
+Version: 1.1.0
 License: GPL-3.0
 
 Features:
@@ -76,6 +76,18 @@ except ImportError as e:
     print(f"[Arctenox Essentials] Warning: Could not import Cost Estimator: {e}")
     ExecutionCostEstimator = None
 
+
+# Import Save Image With Metadata
+try:
+    from .ArctenoxEssentials_SaveImageWithMetadata import (
+        SaveImageWithMetadata,
+        SaveImageWithMetadataAdvanced
+    )
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import Save Image With Metadata: {e}")
+    SaveImageWithMetadata = None
+    SaveImageWithMetadataAdvanced = None
+
 # Version info
 __version__ = "1.0.0"
 __author__ = "Arctenox"
@@ -118,6 +130,15 @@ if ExecutionCostEstimator:
     NODE_CLASS_MAPPINGS["ExecutionCostEstimator"] = ExecutionCostEstimator
     NODE_DISPLAY_NAME_MAPPINGS["ExecutionCostEstimator"] = "Execution Cost Estimator (Arctenox's Essentials)"
 
+# Save Image With Metadata
+if SaveImageWithMetadata:
+    NODE_CLASS_MAPPINGS["SaveImageWithMetadata"] = SaveImageWithMetadata
+    NODE_DISPLAY_NAME_MAPPINGS["SaveImageWithMetadata"] = "💾 Save Image With Metadata (Arctenox)"
+
+if SaveImageWithMetadataAdvanced:
+    NODE_CLASS_MAPPINGS["SaveImageWithMetadataAdvanced"] = SaveImageWithMetadataAdvanced
+    NODE_DISPLAY_NAME_MAPPINGS["SaveImageWithMetadataAdvanced"] = "💾 Save Image With Metadata [Advanced] (Arctenox)"
+
 # Node categories
 NODE_CATEGORIES = {}
 for node_key in NODE_CLASS_MAPPINGS.keys():
@@ -125,6 +146,8 @@ for node_key in NODE_CLASS_MAPPINGS.keys():
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Sampling"
     elif "Latent" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Latent"
+    elif "SaveImage" in node_key:
+        NODE_CATEGORIES[node_key] = "Arctenox Essentials/Output"
     elif "Checkpoint" in node_key or "Passthrough" in node_key or "Box" in node_key or "Estimator" in node_key or "Cost" in node_key or "Predictor" in node_key or "Risk" in node_key or "Artifact" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Utilities"
     else:
@@ -229,6 +252,7 @@ def print_welcome_message():
     print("    • Artifact risk prediction before decoding")
     print("    • Optional character/subject focus phase")
     print("    • Execution cost estimation (VRAM, time, efficiency)")
+    print("    • Save images with embedded metadata (full reproducibility)")
     print("    • Efficient latent generation")
     print("    • Empty box for workflow organization")
     print("    • Checkpoint passthrough for complete checkpoint routing")
@@ -264,4 +288,5 @@ __all__ = [
     "__version__",
     "__author__",
     "__description__"
+]
 ]
