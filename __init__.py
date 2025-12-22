@@ -1,5 +1,5 @@
 """
-Arctenox Workflow Essentials
+Arctenox's Essentials
 =============================
 
 A collection of efficient workflow nodes for ComfyUI, designed to streamline
@@ -7,7 +7,7 @@ and optimize your generation process with combined functionality and
 improved performance.
 
 Author: Arctenox
-Version: 1.1.0
+Version: 1.2.0
 License: GPL-3.0
 
 Features:
@@ -79,17 +79,48 @@ except ImportError as e:
 
 # Import Save Image With Metadata
 try:
-    from .ArctenoxEssentials_SaveImageWithMetadata import (
-        SaveImageWithMetadata,
-        SaveImageWithMetadataAdvanced
-    )
+    from .ArctenoxEssentials_SaveImageWithMetadata import SaveImageWithMetadata
 except ImportError as e:
     print(f"[Arctenox Essentials] Warning: Could not import Save Image With Metadata: {e}")
     SaveImageWithMetadata = None
-    SaveImageWithMetadataAdvanced = None
+
+
+# Import Prompt Styler
+try:
+    from .ArctenoxEssentials_PromptStyler import (
+        PromptStyler,
+        PromptStylerAdvanced
+    )
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import Prompt Styler: {e}")
+    PromptStyler = None
+    PromptStylerAdvanced = None
+
+# Import CLIP Text Encode
+try:
+    from .ArctenoxEssentials_CLIPTextEncode import CLIPTextEncodeWithString
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import CLIP Text Encode: {e}")
+    CLIPTextEncodeWithString = None
+
+# Import Load Checkpoint
+try:
+    from .ArctenoxEssentials_LoadCheckpoint import LoadCheckpointWithString, NODE_CLASS_MAPPINGS as LoadCheckpoint_Mappings, NODE_DISPLAY_NAME_MAPPINGS as LoadCheckpoint_Display_Mappings
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import Load Checkpoint: {e}")
+    LoadCheckpointWithString = None
+    LoadCheckpoint_Mappings = {}
+    LoadCheckpoint_Display_Mappings = {}
+
+# Import Load LoRA
+try:
+    from .ArctenoxEssentials_LoadLoRA import LoadLoRAWithString
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import Load LoRA: {e}")
+    LoadLoRAWithString = None
 
 # Version info
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 __author__ = "Arctenox"
 __description__ = "Arctenox Workflow Essentials - Efficient workflow nodes for ComfyUI"
 
@@ -133,21 +164,48 @@ if ExecutionCostEstimator:
 # Save Image With Metadata
 if SaveImageWithMetadata:
     NODE_CLASS_MAPPINGS["SaveImageWithMetadata"] = SaveImageWithMetadata
-    NODE_DISPLAY_NAME_MAPPINGS["SaveImageWithMetadata"] = "💾 Save Image With Metadata (Arctenox)"
+    NODE_DISPLAY_NAME_MAPPINGS["SaveImageWithMetadata"] = "Save Image With Metadata (Arctenox's Essentials)"
 
-if SaveImageWithMetadataAdvanced:
-    NODE_CLASS_MAPPINGS["SaveImageWithMetadataAdvanced"] = SaveImageWithMetadataAdvanced
-    NODE_DISPLAY_NAME_MAPPINGS["SaveImageWithMetadataAdvanced"] = "💾 Save Image With Metadata [Advanced] (Arctenox)"
+
+# Prompt Styler
+if PromptStyler:
+    NODE_CLASS_MAPPINGS["PromptStyler"] = PromptStyler
+    NODE_DISPLAY_NAME_MAPPINGS["PromptStyler"] = "Prompt Styler (Arctenox's Essentials)"
+
+if PromptStylerAdvanced:
+    NODE_CLASS_MAPPINGS["PromptStylerAdvanced"] = PromptStylerAdvanced
+    NODE_DISPLAY_NAME_MAPPINGS["PromptStylerAdvanced"] = "Prompt Styler [Advanced] (Arctenox's Essentials)"
+
+# CLIP Text Encode
+if CLIPTextEncodeWithString:
+    NODE_CLASS_MAPPINGS["CLIPTextEncodeWithString"] = CLIPTextEncodeWithString
+    NODE_DISPLAY_NAME_MAPPINGS["CLIPTextEncodeWithString"] = "CLIP Text Encode + String (Arctenox's Essentials)"
+
+# Load Checkpoint
+if LoadCheckpointWithString:
+    NODE_CLASS_MAPPINGS.update(LoadCheckpoint_Mappings)
+    NODE_DISPLAY_NAME_MAPPINGS.update(LoadCheckpoint_Display_Mappings)
+
+# Load LoRA
+if LoadLoRAWithString:
+    NODE_CLASS_MAPPINGS["LoadLoRAWithString"] = LoadLoRAWithString
+    NODE_DISPLAY_NAME_MAPPINGS["LoadLoRAWithString"] = "Load LoRA + String (Arctenox's Essentials)"
 
 # Node categories
 NODE_CATEGORIES = {}
 for node_key in NODE_CLASS_MAPPINGS.keys():
-    if "Sampler" in node_key or "Seed" in node_key or "Topology" in node_key or "Phase" in node_key or "Prompt" in node_key:
+    if "Sampler" in node_key or "Seed" in node_key or "Topology" in node_key or "Phase" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Sampling"
     elif "Latent" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Latent"
     elif "SaveImage" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Output"
+    elif "Styler" in node_key or "Style" in node_key:
+        NODE_CATEGORIES[node_key] = "Arctenox Essentials/Prompting"
+    elif "CLIP" in node_key or "Encode" in node_key:
+        NODE_CATEGORIES[node_key] = "Arctenox Essentials/Conditioning"
+    elif "LoadCheckpoint" in node_key or "ArctenoxLoadCheckpoint" in node_key or "LoadLoRA" in node_key:
+        NODE_CATEGORIES[node_key] = "Arctenox Essentials/Loaders"
     elif "Checkpoint" in node_key or "Passthrough" in node_key or "Box" in node_key or "Estimator" in node_key or "Cost" in node_key or "Predictor" in node_key or "Risk" in node_key or "Artifact" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Utilities"
     else:
@@ -253,6 +311,10 @@ def print_welcome_message():
     print("    • Optional character/subject focus phase")
     print("    • Execution cost estimation (VRAM, time, efficiency)")
     print("    • Save images with embedded metadata (full reproducibility)")
+    print("    • Prompt styling with 40+ presets (cinematic, anime, photorealistic, etc.)")
+    print("    • CLIP Text Encode with metadata output")
+    print("    • Load Checkpoint with model name and hash output")
+    print("    • Load LoRA with model name and hash output")
     print("    • Efficient latent generation")
     print("    • Empty box for workflow organization")
     print("    • Checkpoint passthrough for complete checkpoint routing")
@@ -288,5 +350,4 @@ __all__ = [
     "__version__",
     "__author__",
     "__description__"
-]
 ]
