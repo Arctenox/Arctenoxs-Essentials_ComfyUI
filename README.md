@@ -46,15 +46,12 @@ If you encounter missing dependencies, install them with:
 ```bash
 pip install torch numpy psutil
 ```
----
-### Developer Notes
 
-If you see "Sampling failed: . Check that all inputs are valid tensors." upon canceling it while running the KSampler in this, don't panic, that will happen and you can completely ignore it, I couldn't get that error pop up to go away, so it's just there.
 ---
 
 ## 🎯 Overview
 
-Arctenox's Essentials provides a suite of powerful workflow nodes that enhance ComfyUI with advanced sampling techniques, intelligent seed management, temporal prompt processing, and workflow optimization tools. Each node is designed to integrate seamlessly into your existing workflows while adding sophisticated functionality.
+Arctenox's Essentials provides a suite of powerful workflow nodes that enhance ComfyUI with advanced sampling techniques, intelligent seed management, temporal prompt processing, and workflow optimization tools. Each node is designed to integrate seamlessly into your existing workflows while adding sophisticated functionality. And if you see "Sampling failed: . Check that all inputs are valid tensors." upon canceling it while running the KSampler in this, don't panic, that will happen and you can completely ignore it, I couldn't get that error pop up to go away, so it's just there.
 
 ### Key Features
 
