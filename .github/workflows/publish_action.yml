@@ -2,8 +2,10 @@ name: Publish to Comfy registry
 on:
   workflow_dispatch:
   push:
-    tags:
-      - '*.*.*'  # Triggers on version tags like 1.0.0, 1.2.0, etc.
+    branches:
+      - 1.2.0
+    paths:
+      - "pyproject.toml"  # Only triggers when pyproject.toml changes
 
 jobs:
   publish-node:
