@@ -18,7 +18,7 @@ Features:
 - Simple text-based LoRA input (name:strength format)
 
 Author: Arctenox
-Version: 2.0.0 - Now uses FULL SHA256 hashes for LoRAs
+Version: 2.0.0 - uses FULL SHA256 hashes for LoRAs
 License: GPL-3.0
 """
 
