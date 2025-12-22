@@ -277,6 +277,11 @@ class PromptStyler:
                     "multiline": True,
                     "tooltip": "Your main subject/scene description"
                 }),
+                "base_negative": ("STRING", {
+                    "default": "low quality, worst quality, bad anatomy, bad hands, bad body, bad face, bad teeth, bad arms, bad legs, deformities, jpeg artifacts, signature, watermark, username, blurry, artist name, trademark, title, text, multiple view, Reference sheet, long neck",
+                    "multiline": True,
+                    "tooltip": "Base negative prompt (editable)"
+                }),
                 "style": (list(cls.STYLE_TEMPLATES.keys()),),
                 "quality_tier": (list(cls.QUALITY_TIERS.keys()),),
                 "use_negative_suggestions": ("BOOLEAN", {
@@ -303,7 +308,7 @@ class PromptStyler:
     FUNCTION = "apply_style"
     CATEGORY = "Arctenox Essentials/Prompting"
     
-    def apply_style(self, base_prompt, style, quality_tier, use_negative_suggestions, 
+    def apply_style(self, base_prompt, base_negative, style, quality_tier, use_negative_suggestions, 
                    custom_positive="", custom_negative=""):
         """
         Apply selected style and quality to base prompt.
@@ -342,7 +347,7 @@ class PromptStyler:
         positive_prompt = ", ".join(positive_parts)
         
         # Build negative prompt
-        negative_parts = [self.NEGATIVE_BASE]
+        negative_parts = [base_negative] if base_negative.strip() else []
         
         # Add style-specific negatives
         if use_negative_suggestions and style != "None":
@@ -374,6 +379,11 @@ class PromptStylerAdvanced(PromptStyler):
                     "default": "a beautiful landscape",
                     "multiline": True,
                     "tooltip": "Your main subject/scene description"
+                }),
+                "base_negative": ("STRING", {
+                    "default": "low quality, worst quality, bad anatomy, bad hands, bad body, bad face, bad teeth, bad arms, bad legs, deformities, jpeg artifacts, signature, watermark, username, blurry, artist name, trademark, title, text, multiple view, Reference sheet, long neck",
+                    "multiline": True,
+                    "tooltip": "Base negative prompt (editable)"
                 }),
                 "primary_style": (list(cls.STYLE_TEMPLATES.keys()),),
                 "secondary_style": (list(cls.STYLE_TEMPLATES.keys()),),
@@ -408,7 +418,7 @@ class PromptStylerAdvanced(PromptStyler):
     FUNCTION = "apply_advanced_style"
     CATEGORY = "Arctenox Essentials/Prompting"
     
-    def apply_advanced_style(self, base_prompt, primary_style, secondary_style, 
+    def apply_advanced_style(self, base_prompt, base_negative, primary_style, secondary_style, 
                            style_mix_ratio, quality_tier, use_negative_suggestions,
                            custom_positive="", custom_negative="", emphasis_words=""):
         """
@@ -454,7 +464,7 @@ class PromptStylerAdvanced(PromptStyler):
                     positive_prompt = positive_prompt.replace(word, f"({word}:1.2)")
         
         # Build negative prompt (combine negatives from both styles)
-        negative_parts = [self.NEGATIVE_BASE]
+        negative_parts = [base_negative] if base_negative.strip() else []
         
         if use_negative_suggestions:
             if primary_style != "None":
