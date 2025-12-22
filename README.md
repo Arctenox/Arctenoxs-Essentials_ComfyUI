@@ -47,7 +47,8 @@ If you encounter missing dependencies, install them with:
 pip install torch numpy psutil
 ```
 ---
-Developer Notes
+### Developer Notes
+
 If you see "Sampling failed: . Check that all inputs are valid tensors." upon canceling it while running the KSampler in this, don't panic, that will happen and you can completely ignore it, I couldn't get that error pop up to go away, so it's just there.
 ---
 
