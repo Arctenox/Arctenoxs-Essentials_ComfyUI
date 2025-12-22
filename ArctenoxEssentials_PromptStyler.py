@@ -266,7 +266,7 @@ class PromptStyler:
     }
     
     # Common negative prompt base
-    NEGATIVE_BASE = "blurry, low quality, worst quality, low resolution, bad anatomy, bad proportions, distorted, disfigured"
+    NEGATIVE_BASE = ""
     
     @classmethod
     def INPUT_TYPES(cls):
