@@ -11,23 +11,6 @@ class KSamplerWithLatent:
     A combined node that creates an empty latent image and performs efficient sampling
     """
     
-    # Output cache to prevent regeneration with identical inputs
-    _output_cache = {}
-    _cache_max_size = 100
-    
-    @classmethod
-    def _get_cache_key(cls, seed, sonar, steps, cfg, sampler_name, scheduler, denoise, width, height):
-        """Generate a unique cache key from sampling parameters"""
-        return f"{seed}_{sonar}_{steps}_{cfg}_{sampler_name}_{scheduler}_{denoise}_{width}_{height}"
-    
-    @classmethod
-    def _clear_old_cache(cls):
-        """Clear cache if it gets too large"""
-        if len(cls._output_cache) > cls._cache_max_size:
-            # Remove oldest 50% of entries
-            items = list(cls._output_cache.items())
-            cls._output_cache = dict(items[len(items)//2:])
-    
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -58,18 +41,6 @@ class KSamplerWithLatent:
     RETURN_NAMES = ("MODEL", "CONDITIONING+", "CONDITIONING-", "LATENT", "VAE", "IMAGE")
     FUNCTION = "sample"
     CATEGORY = "sampling/custom"
-
-    @classmethod
-    def IS_CHANGED(cls, model, positive, negative, width, height, batch_size, seed, sonar, steps, cfg, 
-                   sampler_name, scheduler, denoise, vae_decode, latent_image=None, optional_vae=None, script=None):
-        """
-        This method tells ComfyUI when to regenerate.
-        Return the same value = use cache. Return different value = regenerate.
-        We return a hash of seed+sonar+width+height+batch_size so it only regenerates when these change.
-        """
-        # Only regenerate if seed, sonar, or dimensions change
-        # This makes it behave like the base KSampler
-        return f"{seed}_{sonar}_{width}_{height}_{batch_size}_{steps}_{cfg}_{sampler_name}_{scheduler}_{denoise}"
 
     def _golden_ratio_sonar_transform(self, seed, sonar):
         """
@@ -160,13 +131,6 @@ class KSamplerWithLatent:
                sampler_name, scheduler, denoise, vae_decode,
                latent_image=None, optional_vae=None, script=None):
         
-        # Check cache first - if we've already generated with these exact parameters, return cached result
-        cache_key = self._get_cache_key(seed, sonar, steps, cfg, sampler_name, scheduler, denoise, width, height)
-        if cache_key in self._output_cache:
-            cached = self._output_cache[cache_key]
-            print(f"[KSampler] Using cached output for seed={seed}, sonar={sonar}")
-            return cached
-        
         # Extract tensor from latent_image or create new one
         latent_tensor = None
         
@@ -217,29 +181,11 @@ class KSamplerWithLatent:
         if sonar != 0:
             noise_seed = self._golden_ratio_sonar_transform(noise_seed, sonar)
         
-        # DETERMINISM FIX: Set torch random state to ensure same seed = same output
-        # Save current RNG state
-        cpu_state = torch.get_rng_state()
-        cuda_states = []
-        if torch.cuda.is_available():
-            cuda_states = [torch.cuda.get_rng_state(i) for i in range(torch.cuda.device_count())]
-        
-        # Set deterministic seed for noise generation
-        torch.manual_seed(noise_seed)
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed_all(noise_seed)
-        
         # Generate noise using ComfyUI's standard method
         batch_inds = latent_image.get("batch_index") if isinstance(latent_image, dict) else None
         
         # Use comfy's prepare_noise
         noise = comfy.sample.prepare_noise(latent_tensor, noise_seed, batch_inds)
-        
-        # Restore original RNG state to not affect other nodes
-        torch.set_rng_state(cpu_state)
-        if torch.cuda.is_available() and cuda_states:
-            for i, state in enumerate(cuda_states):
-                torch.cuda.set_rng_state(state, i)
         
         # Use processed values for sampling
         processed_cfg = self._handle_large_cfg(cfg)
@@ -310,7 +256,7 @@ class KSamplerWithLatent:
             image = torch.zeros((batch_size, 64, 64, 3), dtype=torch.float32, device=output_tensor.device)
         
         # Ensure we return the latent in the correct dict format
-        result = (
+        return (
             model,                           # MODEL
             positive,                        # CONDITIONING+
             negative,                        # CONDITIONING-
@@ -318,13 +264,6 @@ class KSamplerWithLatent:
             vae,                            # VAE
             image                           # IMAGE
         )
-        
-        # Store in cache for future use
-        self._output_cache[cache_key] = result
-        self._clear_old_cache()
-        print(f"[KSampler] Generated and cached output for seed={seed}, sonar={sonar}")
-        
-        return result
 
 
 class EfficientLatentImage:
