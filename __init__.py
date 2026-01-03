@@ -119,13 +119,6 @@ except ImportError as e:
     print(f"[Arctenox Essentials] Warning: Could not import Load LoRA: {e}")
     LoadLoRAWithString = None
 
-# Import Load Clip
-try:
-    from .ArctenoxEssentials_LoadClip import ArcLoadClip
-except ImportError as e:
-    print(f"[Arctenox Essentials] Warning: Could not import Load Clip: {e}")
-    ArcLoadClip = None
-
 # Version info
 __version__ = "1.2.0"
 __author__ = "Arctenox"
@@ -198,11 +191,6 @@ if LoadLoRAWithString:
     NODE_CLASS_MAPPINGS["LoadLoRAWithString"] = LoadLoRAWithString
     NODE_DISPLAY_NAME_MAPPINGS["LoadLoRAWithString"] = "Load LoRA + String (Arctenox's Essentials)"
 
-# Load Clip
-if ArcLoadClip:
-    NODE_CLASS_MAPPINGS["ArcLoadClip"] = ArcLoadClip
-    NODE_DISPLAY_NAME_MAPPINGS["ArcLoadClip"] = "Load Clip - SDXL (Arctenox's Essentials)"
-
 # Node categories
 NODE_CATEGORIES = {}
 for node_key in NODE_CLASS_MAPPINGS.keys():
@@ -214,7 +202,7 @@ for node_key in NODE_CLASS_MAPPINGS.keys():
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Output"
     elif "Styler" in node_key or "Style" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Prompting"
-    elif "CLIP" in node_key or "Encode" in node_key or "ArcLoadClip" in node_key:
+    elif "CLIP" in node_key or "Encode" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Conditioning"
     elif "LoadCheckpoint" in node_key or "ArctenoxLoadCheckpoint" in node_key or "LoadLoRA" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Loaders"
@@ -286,7 +274,7 @@ def get_system_info():
 def print_welcome_message():
     """Print welcome message with system information."""
     print("\n" + "="*60)
-    print("🔮 Arctenox Workflow Essentials Loaded")
+    print("ðŸ”® Arctenox Workflow Essentials Loaded")
     print("="*60)
     print(f"Version: {__version__}")
     print(f"Author: {__author__}")
@@ -295,7 +283,7 @@ def print_welcome_message():
     # System info
     sys_info = get_system_info()
     if sys_info:
-        print(f"\n📊 System Information:")
+        print(f"\nðŸ“Š System Information:")
         print(f"  PyTorch: {sys_info.get('torch_version', 'Unknown')}")
         
         if sys_info.get("cuda_available"):
@@ -307,30 +295,29 @@ def print_welcome_message():
         else:
             print(f"  GPU: CPU fallback mode")
     
-    print(f"\n🚀 Available Nodes:")
+    print(f"\nðŸš€ Available Nodes:")
     for category in sorted(set(NODE_CATEGORIES.values())):
         print(f"\n  {category}:")
         for node_class, node_category in NODE_CATEGORIES.items():
             if node_category == category:
                 display_name = NODE_DISPLAY_NAME_MAPPINGS.get(node_class, node_class)
-                print(f"    • {display_name}")
+                print(f"    â€¢ {display_name}")
     
-    print(f"\n💡 Features:")
-    print("    • Golden ratio sonar seed transformation")
-    print("    • Seed topology mapping for structured exploration")
-    print("    • Temporal prompt phase splitting (composition→detail→texture)")
-    print("    • Artifact risk prediction before decoding")
-    print("    • Optional character/subject focus phase")
-    print("    • Execution cost estimation (VRAM, time, efficiency)")
-    print("    • Save images with embedded metadata (full reproducibility)")
-    print("    • Prompt styling with 40+ presets (cinematic, anime, photorealistic, etc.)")
-    print("    • CLIP Text Encode with metadata output")
-    print("    • Load Checkpoint with model name and hash output")
-    print("    • Load LoRA with model name and hash output")
-    print("    • Load Clip for SDXL/Illustrious/NAI models")
-    print("    • Efficient latent generation")
-    print("    • Empty box for workflow organization")
-    print("    • Checkpoint passthrough for complete checkpoint routing")
+    print(f"\nðŸ’¡ Features:")
+    print("    â€¢ Golden ratio sonar seed transformation")
+    print("    â€¢ Seed topology mapping for structured exploration")
+    print("    â€¢ Temporal prompt phase splitting (compositionâ†’detailâ†’texture)")
+    print("    â€¢ Artifact risk prediction before decoding")
+    print("    â€¢ Optional character/subject focus phase")
+    print("    â€¢ Execution cost estimation (VRAM, time, efficiency)")
+    print("    â€¢ Save images with embedded metadata (full reproducibility)")
+    print("    â€¢ Prompt styling with 40+ presets (cinematic, anime, photorealistic, etc.)")
+    print("    â€¢ CLIP Text Encode with metadata output")
+    print("    â€¢ Load Checkpoint with model name and hash output")
+    print("    â€¢ Load LoRA with model name and hash output")
+    print("    â€¢ Efficient latent generation")
+    print("    â€¢ Empty box for workflow organization")
+    print("    â€¢ Checkpoint passthrough for complete checkpoint routing")
     
     print("="*60 + "\n")
 
