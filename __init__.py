@@ -119,6 +119,13 @@ except ImportError as e:
     print(f"[Arctenox Essentials] Warning: Could not import Load LoRA: {e}")
     LoadLoRAWithString = None
 
+# Import Load Clip
+try:
+    from .ArctenoxEssentials_LoadClip import ArcLoadClip
+except ImportError as e:
+    print(f"[Arctenox Essentials] Warning: Could not import Load Clip: {e}")
+    ArcLoadClip = None
+
 # Version info
 __version__ = "1.2.0"
 __author__ = "Arctenox"
@@ -191,6 +198,11 @@ if LoadLoRAWithString:
     NODE_CLASS_MAPPINGS["LoadLoRAWithString"] = LoadLoRAWithString
     NODE_DISPLAY_NAME_MAPPINGS["LoadLoRAWithString"] = "Load LoRA + String (Arctenox's Essentials)"
 
+# Load Clip
+if ArcLoadClip:
+    NODE_CLASS_MAPPINGS["ArcLoadClip"] = ArcLoadClip
+    NODE_DISPLAY_NAME_MAPPINGS["ArcLoadClip"] = "Load Clip - SDXL (Arctenox's Essentials)"
+
 # Node categories
 NODE_CATEGORIES = {}
 for node_key in NODE_CLASS_MAPPINGS.keys():
@@ -202,7 +214,7 @@ for node_key in NODE_CLASS_MAPPINGS.keys():
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Output"
     elif "Styler" in node_key or "Style" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Prompting"
-    elif "CLIP" in node_key or "Encode" in node_key:
+    elif "CLIP" in node_key or "Encode" in node_key or "ArcLoadClip" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Conditioning"
     elif "LoadCheckpoint" in node_key or "ArctenoxLoadCheckpoint" in node_key or "LoadLoRA" in node_key:
         NODE_CATEGORIES[node_key] = "Arctenox Essentials/Loaders"
@@ -315,6 +327,7 @@ def print_welcome_message():
     print("    • CLIP Text Encode with metadata output")
     print("    • Load Checkpoint with model name and hash output")
     print("    • Load LoRA with model name and hash output")
+    print("    • Load Clip for SDXL/Illustrious/NAI models")
     print("    • Efficient latent generation")
     print("    • Empty box for workflow organization")
     print("    • Checkpoint passthrough for complete checkpoint routing")
