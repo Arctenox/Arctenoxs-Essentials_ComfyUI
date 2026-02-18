@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - '1.3.0'  # Triggers on version tags like 1.0.0, 1.2.0, etc.
+      - 'v1.3.0'  # Triggers on version tags like 1.0.0, 1.2.0, etc.
 
 jobs:
   publish-node:
