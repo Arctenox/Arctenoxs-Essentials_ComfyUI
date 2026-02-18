@@ -24,6 +24,7 @@ License: GPL-3.0
 """
 
 import os
+import re
 import csv
 import random
 import threading
@@ -620,9 +621,6 @@ def _normalize_and_dedup(text: str, preserve_order: bool) -> tuple:
 
     removed = original_count - len(result)
     return ", ".join(result), removed, original_count
-
-
-import re as _re_mod  # re already imported at top, alias just for clarity below
 
 
 class TagNormalizer:
