@@ -318,18 +318,20 @@ def _sort_tags(tags: list) -> list:
 
 
 def generate_prompt(
-    seed_tags:       str,
-    source:          str,
-    tag_count:       int,
-    variability:     float,
-    rating:          str,
-    min_post_count:  int,
-    add_quality:     bool,
-    quality_count:   int,
-    prepend:         str,
-    append:          str,
-    seed:            int,
-    filter_tags:     str = "",   # ← new parameter
+    seed_tags:         str,
+    source:            str,
+    tag_count:         int,
+    variability:       float,
+    rating:            str,
+    min_post_count:    int,
+    add_quality:       bool,
+    quality_count:     int,
+    prepend:           str,
+    append:            str,
+    seed:              int,
+    filter_tags:       str = "",
+    exclude_artist:    bool = True,
+    exclude_copyright: bool = True,
 ) -> tuple:
     """
     Main generation function. Returns (prompt, debug_info).
@@ -377,6 +379,18 @@ def generate_prompt(
         others   = sorted(others, key=lambda t: _DB.tags[t].get("count", 0), reverse=True)
         generated = list(seed_set) + others[:tag_count - len(seed_set)]
 
+    # Strip artist/copyright tags from generated set if requested
+    if exclude_artist or exclude_copyright:
+        blocked_cats = set()
+        if exclude_artist:
+            blocked_cats.add(1)
+        if exclude_copyright:
+            blocked_cats.add(3)
+        generated = [
+            t for t in generated
+            if _DB.tags.get(t, {}).get("category", 0) not in blocked_cats
+        ]
+
     # Sort into natural order
     generated = _sort_tags(generated)
 
@@ -396,7 +410,7 @@ def generate_prompt(
     if append.strip():
         parts.append(append.strip())
 
-    prompt = ", ".join(parts).replace("_", " ")
+    prompt = ", ".join(parts).replace("_", " ").replace("(", " \\(").replace(")", "\\)")
 
     # Debug info
     sources_used = set(_DB.tags.get(t, {}).get("source", "?") for t in generated)
@@ -471,7 +485,7 @@ class PromptGenerator:
                     ),
                 }),
                 "min_post_count": ("INT", {
-                    "default": 500, "min": 0, "max": 100000, "step": 100,
+                    "default": 500, "min": 1, "max": 100000, "step": 1,
                     "tooltip": "Ignore tags with fewer posts than this. Higher = more common tags only.",
                 }),
                 "add_quality_tags": ("BOOLEAN", {
@@ -484,6 +498,21 @@ class PromptGenerator:
                 "seed": ("INT", {
                     "default": 0, "min": -1, "max": 0xffffffffffffffff,
                     "tooltip": "-1 = random every run. 0+ = reproducible.",
+                }),
+                "exclude_artist_tags": ("BOOLEAN", {
+                    "default": True,
+                    "tooltip": (
+                        "Strip artist tags (category 1) from the generated output.\n"
+                        "Useful when seed_tags come from Raffle unfiltered data which\n"
+                        "may include artist credits you don't want in the prompt."
+                    ),
+                }),
+                "exclude_copyright_tags": ("BOOLEAN", {
+                    "default": True,
+                    "tooltip": (
+                        "Strip copyright/series tags (category 3) from the generated output.\n"
+                        "e.g. 'arknights', 'genshin_impact', 'fate/grand_order'."
+                    ),
                 }),
             },
             "optional": {
@@ -513,40 +542,43 @@ class PromptGenerator:
     )
 
     @classmethod
-    def IS_CHANGED(cls, seed, filter_tags="", **kwargs):
+    def IS_CHANGED(cls, seed, filter_tags="", exclude_artist_tags=True, exclude_copyright_tags=True, **kwargs):
         if seed == -1:
             return float("NaN")
-        # Include filter in cache key so changing it forces a re-run
-        return hash((seed, filter_tags))
+        return hash((seed, filter_tags, exclude_artist_tags, exclude_copyright_tags))
 
     def generate(
         self,
-        seed_tags:         str,
-        filter_tags:       str,
-        tag_count:         int,
-        source:            str,
-        rating:            str,
-        variability:       float,
-        min_post_count:    int,
-        add_quality_tags:  bool,
-        quality_tag_count: int,
-        seed:              int,
-        prepend_text:      str = "",
-        append_text:       str = "",
+        seed_tags:              str,
+        filter_tags:            str,
+        tag_count:              int,
+        source:                 str,
+        rating:                 str,
+        variability:            float,
+        min_post_count:         int,
+        add_quality_tags:       bool,
+        quality_tag_count:      int,
+        seed:                   int,
+        exclude_artist_tags:    bool = True,
+        exclude_copyright_tags: bool = True,
+        prepend_text:           str = "",
+        append_text:            str = "",
     ):
         prompt, debug = generate_prompt(
-            seed_tags      = seed_tags,
-            source         = source,
-            tag_count      = tag_count,
-            variability    = variability,
-            rating         = rating,
-            min_post_count = min_post_count,
-            add_quality    = add_quality_tags,
-            quality_count  = quality_tag_count,
-            prepend        = prepend_text,
-            append         = append_text,
-            seed           = seed,
-            filter_tags    = filter_tags,
+            seed_tags         = seed_tags,
+            source            = source,
+            tag_count         = tag_count,
+            variability       = variability,
+            rating            = rating,
+            min_post_count    = min_post_count,
+            add_quality       = add_quality_tags,
+            quality_count     = quality_tag_count,
+            prepend           = prepend_text,
+            append            = append_text,
+            seed              = seed,
+            filter_tags       = filter_tags,
+            exclude_artist    = exclude_artist_tags,
+            exclude_copyright = exclude_copyright_tags,
         )
         return (prompt, debug)
 
