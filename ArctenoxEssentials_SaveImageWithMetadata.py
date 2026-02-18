@@ -126,10 +126,9 @@ class SaveImageWithMetadata:
                     "forceInput": True,
                     "tooltip": "Model/checkpoint hash (for Civitai detection)"
                 }),
-                "vae": ("STRING", {
-                    "default": "",
-                    "multiline": False,
-                    "tooltip": "VAE filename (e.g. vae-ft-mse-840000-ema-pruned.safetensors)\nHash is calculated automatically for Civitai detection"
+                "vae": (["none"] + folder_paths.get_filename_list("vae"), {
+                    "default": "none",
+                    "tooltip": "VAE to embed in metadata. Hash is calculated automatically for Civitai detection."
                 }),
                 "loras": ("STRING", {
                     "default": "",
@@ -289,7 +288,7 @@ class SaveImageWithMetadata:
         """
         result = {"name": "", "hash": ""}
 
-        if not vae_text or not vae_text.strip():
+        if not vae_text or not vae_text.strip() or vae_text == "none":
             return result
 
         vae_filename = vae_text.strip()
