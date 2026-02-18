@@ -411,7 +411,7 @@ def generate_prompt(
     if append.strip():
         parts.append(append.strip())
 
-    prompt = ", ".join(parts).replace("_", " ").replace("(", "\\(").replace(")", "\\)")
+    prompt = ", ".join(parts).replace("_", " ").replace("(", "\(").replace(")", "\)")
 
     # Debug info
     sources_used = set(_DB.tags.get(t, {}).get("source", "?") for t in generated)
@@ -628,7 +628,7 @@ class TagNormalizer:
     Deduplicates and normalises a comma-separated tag/prompt string.
 
     - Removes exact duplicate tags (case-insensitive, space/underscore-insensitive)
-    - Optionally escapes ( ) → \\( \\)
+    - Optionally escapes ( ) → \( \)
     - Optionally converts underscores to spaces
     - Optionally sorts tags alphabetically
     - Outputs the cleaned string and a debug summary
@@ -649,7 +649,7 @@ class TagNormalizer:
                 }),
                 "escape_parentheses": ("BOOLEAN", {
                     "default": True,
-                    "tooltip": "Replace ( with \\( and ) with \\) for stable diffusion weight syntax.",
+                    "tooltip": "Replace ( with \( and ) with \) for stable diffusion weight syntax.",
                 }),
                 "underscores_to_spaces": ("BOOLEAN", {
                     "default": True,
