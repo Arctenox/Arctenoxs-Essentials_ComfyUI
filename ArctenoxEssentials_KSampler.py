@@ -34,11 +34,17 @@ class KSamplerWithLatent:
                 "latent_image": ("LATENT",),
                 "optional_vae": ("VAE",),
                 "script": ("SCRIPT",),
+                "vae_name": ("STRING", {
+                    "default": "",
+                    "multiline": False,
+                    "forceInput": True,
+                    "tooltip": "VAE filename for metadata (e.g. vae-ft-mse-840000-ema-pruned)"
+                }),
             }
         }
 
-    RETURN_TYPES = ("MODEL", "CONDITIONING", "CONDITIONING", "LATENT", "VAE", "IMAGE", "INT")
-    RETURN_NAMES = ("MODEL", "CONDITIONING+", "CONDITIONING-", "LATENT", "VAE", "IMAGE", "seed_used")
+    RETURN_TYPES = ("MODEL", "CONDITIONING", "CONDITIONING", "LATENT", "VAE", "IMAGE", "INT", "INT", "FLOAT", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("MODEL", "CONDITIONING+", "CONDITIONING-", "LATENT", "VAE", "IMAGE", "seed_used", "steps", "cfg", "sampler_name", "scheduler", "vae_name")
     FUNCTION = "sample"
     CATEGORY = "Arctenox Essentials/Sampling"
 
@@ -129,7 +135,7 @@ class KSamplerWithLatent:
 
     def sample(self, model, positive, negative, width, height, batch_size, seed, sonar, steps, cfg, 
                sampler_name, scheduler, denoise, vae_decode,
-               latent_image=None, optional_vae=None, script=None):
+               latent_image=None, optional_vae=None, script=None, vae_name=""):
         
         # Extract tensor from latent_image or create new one
         latent_tensor = None
@@ -266,9 +272,14 @@ class KSamplerWithLatent:
             positive,                        # CONDITIONING+
             negative,                        # CONDITIONING-
             {"samples": output_tensor},      # LATENT (dict format for ComfyUI)
-            vae,                            # VAE
-            image,                          # IMAGE
-            seed_used                       # seed_used
+            vae,                             # VAE
+            image,                           # IMAGE
+            seed_used,                       # seed_used
+            steps,                           # steps
+            cfg,                             # cfg
+            sampler_name,                    # sampler_name
+            scheduler,                       # scheduler
+            vae_name,                        # vae_name
         )
 
 
