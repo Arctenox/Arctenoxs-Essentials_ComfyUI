@@ -14,6 +14,7 @@ import os
 import hashlib
 import folder_paths
 import comfy.sd
+import comfy.utils
 
 
 class LoadVAEWithMetadata:
@@ -36,9 +37,10 @@ class LoadVAEWithMetadata:
     CATEGORY = "Arctenox Essentials/Loaders"
 
     def load_vae(self, vae_name):
-        # Load the VAE using ComfyUI's standard method
+        # Load the VAE using ComfyUI's correct method
         vae_path = folder_paths.get_full_path("vae", vae_name)
-        vae = comfy.sd.VAE(ckpt_path=vae_path)
+        sd = comfy.utils.load_torch_file(vae_path)
+        vae = comfy.sd.VAE(sd=sd)
 
         # Strip extension for clean display name (Civitai style)
         clean_name = os.path.splitext(vae_name)[0]
