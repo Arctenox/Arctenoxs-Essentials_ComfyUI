@@ -5,7 +5,7 @@ Arctenox's Essentials
 A collection of efficient workflow nodes for ComfyUI.
 
 Author: Arctenox
-Version: 1.4.0
+Version: 1.3.0
 License: GPL-3.0
 
 New in v1.3.0:
@@ -23,7 +23,7 @@ from pathlib import Path
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 
-__version__     = "1.4.0"
+__version__     = "1.3.0"
 __author__      = "Arctenox"
 __description__ = "Arctenox Workflow Essentials — Efficient workflow nodes for ComfyUI"
 
@@ -329,11 +329,12 @@ def _print_welcome():
             if name.strip():
                 print(f"      • {name}")
 
-    print(f"\n  New in v1.4.0:")
+    print(f"\n  New in v1.3.0:")
     for item in [
         "Tag Normalizer  — deduplicates tags, escapes parentheses, underscore→space",
         "Prompt Generator  — exclude artist/copyright tags toggles, min_post_count steps by 1",
         "Prompt Generator  — parenthesis escaping now built-in",
+        "And more",
     ]:
         print(f"    + {item}")
     print("=" * 62 + "\n")
