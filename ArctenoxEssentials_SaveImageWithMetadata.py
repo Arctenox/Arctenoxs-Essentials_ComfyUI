@@ -223,9 +223,9 @@ class SaveImageWithMetadata:
                 if embed_workflow == "enabled" and prompt is not None:
                     metadata.add_text("prompt", json.dumps(prompt))
                     metadata.add_text("workflow", json.dumps(prompt))
-                
-                # Add extra PNG info
-                if extra_pnginfo is not None:
+
+                # Add extra PNG info (workflow graph) — only when enabled
+                if embed_workflow == "enabled" and extra_pnginfo is not None:
                     for key, value in extra_pnginfo.items():
                         metadata.add_text(key, json.dumps(value))
                 
