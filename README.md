@@ -1,5 +1,5 @@
-# Arctenox's Essentials
-
+# Arctenox's Essentials (DEPRECATED)
+Note: I'll be remastering some of this with my other node pack into a new node pack.
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![ComfyUI](https://img.shields.io/badge/ComfyUI-Compatible-brightgreen.svg)](https://github.com/comfyanonymous/ComfyUI)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
